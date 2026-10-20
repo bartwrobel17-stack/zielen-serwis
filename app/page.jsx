@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { ArrowDown, ArrowRight, ArrowUpRight, Check, ChevronDown, ChevronLeft, ChevronRight, Droplets, Flower2, Leaf, Menu, Phone, Trees, X, Sprout, Shovel, Waves, Fence, Scissors, MapPin, Clock3, Send, Star } from "lucide-react";
+import { ArrowDown, ArrowRight, ArrowUpRight, Check, ChevronDown, ChevronLeft, ChevronRight, Droplets, Flower2, Leaf, Menu, Phone, Trees, X, Sprout, Shovel, Waves, Fence, Scissors, MapPin, Clock3, Send, Star, MessageCircle, Bot } from "lucide-react";
 
 
 const phone = '795 548 125';
@@ -41,19 +41,32 @@ function App(){
  const [form,setForm]=useState({name:'',email:'',phone:'',service:'',message:''});
  const [sending,setSending]=useState(false);
  const [notice,setNotice]=useState('');
+ const [chatOpen,setChatOpen]=useState(false);
+ const [chatInput,setChatInput]=useState('');
+ const [chatMessages,setChatMessages]=useState([{from:'bot',text:'Cześć! 🌿 Jestem wirtualnym asystentem Zieleń Serwis. Pomogę Ci znaleźć usługę lub skontaktować się z nami. O co chcesz zapytać?' }]);
  useEffect(()=>{const io=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');io.unobserve(e.target)}}),{threshold:.12});document.querySelectorAll('.reveal').forEach(el=>io.observe(el));return()=>io.disconnect()},[]);
  useEffect(()=>{if(activePhoto===null)return;const key=e=>{if(e.key==='Escape')setActivePhoto(null);if(e.key==='ArrowRight')setActivePhoto(i=>(i+1)%gallery.length);if(e.key==='ArrowLeft')setActivePhoto(i=>(i-1+gallery.length)%gallery.length)};window.addEventListener('keydown',key);document.body.style.overflow='hidden';return()=>{window.removeEventListener('keydown',key);document.body.style.overflow=''}},[activePhoto]);
  const scrollTo=id=>{setMenuOpen(false);document.getElementById(id)?.scrollIntoView({behavior:'smooth'})};
  const update=(e)=>setForm({...form,[e.target.name]:e.target.value});
  const submit=e=>{e.preventDefault();setSending(true);const body=encodeURIComponent('Zapytanie ze strony Zieleń Serwis\nImię i nazwisko: '+form.name+'\nE-mail: '+form.email+'\nTelefon: '+form.phone+'\nUsługa: '+form.service+'\nWiadomość: '+form.message);window.location.href='sms:'+tel+'?body='+body;setNotice('Otworzyliśmy aplikację SMS z przygotowaną treścią. Wiadomość zostanie wysłana dopiero po Twoim zatwierdzeniu. Jeśli SMS nie jest dostępny na tym urządzeniu, zadzwoń pod numer 795 548 125.');setSending(false)};
  const shown=filter==='Wszystkie'?gallery:gallery.filter(g=>g.type===filter);
+ const sendChat=(raw=chatInput)=>{const question=raw.trim();if(!question)return;const q=question.toLowerCase();let answer='Najlepiej omówić szczegóły bezpośrednio z zespołem. Zadzwoń pod 795 548 125 lub przejdź do sekcji Kontakt, a przygotujesz wiadomość SMS.';
+ if(/cena|koszt|wycen|ile koszt|drogo/.test(q))answer='Cena zależy od wielkości i stanu terenu oraz zakresu prac. Przygotowanie wyceny zaczynamy od rozmowy i ustalenia potrzeb. Zadzwoń: 795 548 125.';
+ else if(/trawnik|trawa|koszenie/.test(q))answer='Zajmujemy się zakładaniem i pielęgnacją trawników, w tym renowacją i przygotowaniem terenu. Opisz, czego potrzebujesz, w formularzu kontaktowym.';
+ else if(/nawad|podlewan|zraszac/.test(q))answer='Projektujemy i montujemy systemy nawadniania oraz pomagamy w ich konserwacji.';
+ else if(/projekt|zakład|założ|ogr[oó]d|nasadzen|roślin/.test(q))answer='Pomagamy od projektu i przygotowania terenu po nasadzenia, trawnik i pielęgnację. Możesz zamówić kompleksową realizację lub pojedynczą usługę.';
+ else if(/bruk|ścież|taras|pergol|nawierzch|miniładow|ziemne|niwel/.test(q))answer='Wykonujemy nawierzchnie i elementy małej architektury oraz prace ziemne, niwelację i prace z wykorzystaniem miniładowarek.';
+ else if(/gdzie|adres|dojazd|lokal|bydgoszcz|łochow/.test(q))answer='Siedziba: Szosa Bydgoska 22, 86-065 Łochowo. Obsługujemy Łochowo, Bydgoszcz i okolice. Dalszy dojazd najlepiej potwierdzić telefonicznie.';
+ else if(/kontakt|telefon|zadzwoń|numer|sms/.test(q))answer='Zadzwoń pod 795 548 125. Możesz też użyć formularza na stronie — przygotuje SMS do samodzielnego wysłania.';
+ else if(/godzin|kiedy|termin|wolny/.test(q))answer='Nie mam dostępu do aktualnego kalendarza terminów. Zadzwoń pod 795 548 125, żeby ustalić dostępność.';
+ setChatMessages(m=>[...m,{from:'user',text:question},{from:'bot',text:answer}]);setChatInput('');};
  return <div className="site">
   <header className="header"><a href="#top" className="brand" onClick={e=>{e.preventDefault();scrollTo('top')}}><span className="brand-mark"><Leaf size={23}/></span><span>ZIELEŃ<span className="brand-light">SERWIS</span><small>OGRODY • PRZESTRZEŃ • NATURA</small></span></a>
    <nav className={menuOpen?'nav nav-open':'nav'}><a href="#uslugi" onClick={()=>setMenuOpen(false)}>Usługi</a><a href="#o-nas" onClick={()=>setMenuOpen(false)}>O nas</a><a href="#realizacje" onClick={()=>setMenuOpen(false)}>Inspiracje</a><a href="#proces" onClick={()=>setMenuOpen(false)}>Jak działamy</a><a href="#kontakt" onClick={()=>setMenuOpen(false)}>Kontakt</a><a className="nav-cta" href={'tel:'+tel}><Phone size={15}/> {phone}</a></nav>
    <button className="menu-toggle" aria-label={menuOpen?'Zamknij menu':'Otwórz menu'} onClick={()=>setMenuOpen(!menuOpen)}>{menuOpen?<X/>:<Menu/>}</button>
   </header>
   <main>
-   <section className="hero" id="top" style={{'--hero-image':`url("${photos.hero}")`}}>
+   <section className="hero" id="top" style={{'--hero-image':`url("${photos.hero}")`}}><video className="hero-video" autoPlay muted loop playsInline preload="metadata" poster={photos.hero} aria-hidden="true"><source src="https://greenhouse-community.org/wp-content/uploads/2019/11/coverr-positano-landscape-1570959933887.mp4" type="video/mp4" /></video>
     <div className="hero-shade"></div><div className="hero-content">
      <div className="eyebrow"><span></span> KOMPLEKSOWE USŁUGI OGRODNICZE</div>
      <h1>Ogród, w którym<br/>chce się <em>zostać.</em></h1>
@@ -80,6 +93,10 @@ function App(){
    </section>
   </main>
   <footer className="footer"><div className="footer-main"><a href="#top" className="brand footer-brand"><span className="brand-mark"><Leaf size={23}/></span><span>ZIELEŃ<span className="brand-light">SERWIS</span><small>OGRODY • PRZESTRZEŃ • NATURA</small></span></a><p>Tworzymy przestrzenie, w których natura<br/>spotyka się z codziennym życiem.</p><a className="footer-call" href={'tel:'+tel}>{phone} <ArrowUpRight size={17}/></a></div><div className="footer-bottom"><span>© {new Date().getFullYear()} Zieleń Serwis. Wszelkie prawa zastrzeżone.</span><span>Łochowo · Bydgoszcz i okolice</span><a href="#top">Wróć na początek <ArrowUpRight size={14}/></a></div></footer>
+  <div className="chatbot">
+   {chatOpen&&<section className="chat-panel" aria-label="Czat z asystentem Zieleń Serwis"><div className="chat-header"><span className="chat-avatar"><Bot size={19}/></span><span><strong>Asystent Zieleń Serwis</strong><small><span className="chat-online-dot"></span> Dostępny na stronie</small></span><button type="button" aria-label="Zamknij czat" onClick={()=>setChatOpen(false)}><X size={18}/></button></div><div className="chat-messages" aria-live="polite">{chatMessages.map((m,i)=><div key={i} className={'chat-bubble '+(m.from==='user'?'chat-user':'chat-bot')}>{m.text}</div>)}</div><div className="chat-suggestions"><button type="button" onClick={()=>sendChat('Ile kosztuje usługa?')}>Wycena</button><button type="button" onClick={()=>sendChat('Jakie usługi oferujecie?')}>Usługi</button><button type="button" onClick={()=>sendChat('Gdzie działacie?')}>Obszar działania</button></div><form className="chat-input-row" onSubmit={e=>{e.preventDefault();sendChat();}}><input aria-label="Wiadomość do asystenta" value={chatInput} onChange={e=>setChatInput(e.target.value)} placeholder="Napisz wiadomość…" /><button type="submit" aria-label="Wyślij wiadomość"><Send size={17}/></button></form><p className="chat-disclaimer">Automatyczny asystent informacyjny — nie sprawdza dostępności terminów.</p></section>}
+   <button className={'chat-toggle '+(chatOpen?'chat-toggle-open':'')} type="button" onClick={()=>setChatOpen(!chatOpen)} aria-label={chatOpen?'Zamknij czat':'Otwórz czat z asystentem'}>{chatOpen?<X size={22}/>:<MessageCircle size={22}/>}<span>{chatOpen?'Zamknij':'Masz pytanie?'}</span></button>
+  </div>
   <a className="floating-call" href={'tel:'+tel} aria-label="Zadzwoń do Zieleń Serwis"><Phone size={20}/><span>Zadzwoń</span></a>
   {activePhoto!==null&&<div className="lightbox" role="dialog" aria-modal="true" aria-label="Podgląd zdjęcia" onClick={()=>setActivePhoto(null)}><button className="lightbox-close" onClick={()=>setActivePhoto(null)} aria-label="Zamknij"><X/></button><button className="lightbox-prev" onClick={e=>{e.stopPropagation();setActivePhoto(i=>(i-1+gallery.length)%gallery.length)}} aria-label="Poprzednie zdjęcie"><ChevronLeft/></button><img src={gallery[activePhoto].src} alt={gallery[activePhoto].label} onClick={e=>e.stopPropagation()}/><button className="lightbox-next" onClick={e=>{e.stopPropagation();setActivePhoto(i=>(i+1)%gallery.length)}} aria-label="Następne zdjęcie"><ChevronRight/></button><p>{gallery[activePhoto].label} <span>{activePhoto+1} / {gallery.length}</span></p></div>}
  </div>
