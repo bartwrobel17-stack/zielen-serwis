@@ -7,7 +7,7 @@ import { ArrowDown, ArrowRight, ArrowUpRight, Check, ChevronDown, ChevronLeft, C
 const phone = '795 548 125';
 const tel = '+48795548125';
 const photos = {
-  hero: 'https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?auto=format&fit=crop&w=2200&q=90',
+  hero: 'https://images.unsplash.com/photo-1558293842-c0fd3db86157?auto=format&fit=crop&w=2200&q=90',
   garden: 'https://images.unsplash.com/photo-1416879595882-3373a0480b5b?auto=format&fit=crop&w=1200&q=85',
   lawn: 'https://images.unsplash.com/photo-1558904541-eca1d6d4b7f0?auto=format&fit=crop&w=1200&q=85',
   planting: 'https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?auto=format&fit=crop&w=1200&q=85',
@@ -67,7 +67,7 @@ function App(){
    <button className="menu-toggle" aria-label={menuOpen?'Zamknij menu':'Otwórz menu'} onClick={()=>setMenuOpen(!menuOpen)}>{menuOpen?<X/>:<Menu/>}</button>
   </header>
   <main>
-   <section className="hero" id="top" style={{'--hero-image':`url("${photos.hero}")`}}><video className="hero-video" autoPlay muted loop playsInline preload="metadata" poster={photos.hero} aria-hidden="true"><source src="https://greenhouse-community.org/wp-content/uploads/2019/11/coverr-positano-landscape-1570959933887.mp4" type="video/mp4" /></video>
+   <section className="hero" id="top" style={{'--hero-image':`url("${photos.hero}")`}}><video className="hero-video" autoPlay muted loop playsInline preload="metadata" poster={photos.hero} aria-hidden="true"><source src="https://videos.pexels.com/video-files/4763489/4763489-hd_1920_1080_25fps.mp4" type="video/mp4" /></video>
     <div className="hero-shade"></div><div className="hero-content">
      <div className="eyebrow"><span></span> KOMPLEKSOWE USŁUGI OGRODNICZE</div>
      <h1>Ogród, w którym<br/>chce się <em>zostać.</em></h1>
