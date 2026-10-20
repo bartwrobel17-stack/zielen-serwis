@@ -83,15 +83,117 @@ function App(){
   {activePhoto!==null&&<div className="lightbox" role="dialog" aria-modal="true" aria-label="Podgląd zdjęcia" onClick={()=>setActivePhoto(null)}><button className="lightbox-close" onClick={()=>setActivePhoto(null)} aria-label="Zamknij"><X/></button><button className="lightbox-prev" onClick={e=>{e.stopPropagation();setActivePhoto(i=>(i-1+gallery.length)%gallery.length)}} aria-label="Poprzednie zdjęcie"><ChevronLeft/></button><img src={gallery[activePhoto].src} alt={gallery[activePhoto].label} onClick={e=>e.stopPropagation()}/><button className="lightbox-next" onClick={e=>{e.stopPropagation();setActivePhoto(i=>(i+1)%gallery.length)}} aria-label="Następne zdjęcie"><ChevronRight/></button><p>{gallery[activePhoto].label} <span>{activePhoto+1} / {gallery.length}</span></p></div>}
  </div>
 }
+// Nowy, prosty panel demonstracyjny. Hasło jest sprawdzane po stronie przeglądarki,
+// więc ten mechanizm nie chroni poufnych danych na publicznej stronie.
 const OWNER_PANEL_PASSWORD = 'admin';
 
 function OwnerPanel(){
- const [password,setPassword]=useState('');
- const [authenticated,setAuthenticated]=useState(false);
- const [error,setError]=useState('');
- const login=e=>{e.preventDefault();if(password===OWNER_PANEL_PASSWORD){setAuthenticated(true);setError('')}else setError('Nieprawidłowe hasło. Spróbuj ponownie.')};
- if(!authenticated)return <main style={{minHeight:'100vh',display:'grid',placeItems:'center',padding:24,background:'#10150f',color:'#f5f3eb',fontFamily:'Manrope, sans-serif'}}><form onSubmit={login} style={{width:'100%',maxWidth:420,boxSizing:'border-box',padding:32,background:'#192019',border:'1px solid #344034',borderRadius:16}}><div style={{color:'#a7bd8d',fontSize:12,letterSpacing:3,marginBottom:16}}>ZIELEŃ SERWIS</div><h1 style={{fontSize:30,margin:'0 0 8px'}}>Panel właściciela</h1><p style={{color:'#b7beb2',marginBottom:24}}>Wpisz hasło, aby przejść do panelu.</p><label style={{display:'block',fontSize:13,marginBottom:8}} htmlFor="owner-password">Hasło</label><input id="owner-password" type="password" autoComplete="current-password" value={password} onChange={e=>setPassword(e.target.value)} required style={{width:'100%',boxSizing:'border-box',padding:14,borderRadius:8,border:'1px solid #56634f',background:'#10150f',color:'#fff',fontSize:16,marginBottom:16}}/><button type="submit" style={{width:'100%',padding:14,border:0,borderRadius:8,background:'#a7bd8d',color:'#10150f',fontWeight:700,cursor:'pointer'}}>Zaloguj się</button>{error&&<p role="alert" style={{color:'#ffb4a9',fontSize:14}}>{error}</p>}<a href="/" style={{display:'inline-block',marginTop:20,color:'#c9d7bb',fontSize:13}}>← Wróć na stronę</a></form></main>;
- return <main style={{minHeight:'100vh',padding:32,boxSizing:'border-box',background:'#10150f',color:'#f5f3eb',fontFamily:'Manrope, sans-serif'}}><div style={{maxWidth:900,margin:'0 auto'}}><div style={{display:'flex',justifyContent:'space-between',alignItems:'center',gap:16,flexWrap:'wrap'}}><div><p style={{color:'#a7bd8d',letterSpacing:3,fontSize:12}}>ZIELEŃ SERWIS</p><h1 style={{fontSize:34,margin:'8px 0'}}>Panel właściciela</h1></div><button onClick={()=>setAuthenticated(false)} style={{padding:'10px 16px',border:'1px solid #56634f',borderRadius:8,background:'transparent',color:'#f5f3eb',cursor:'pointer'}}>Wyloguj</button></div><section style={{marginTop:28,padding:24,border:'1px solid #344034',borderRadius:12,background:'#192019'}}><h2 style={{marginTop:0}}>Witaj w panelu</h2><p style={{color:'#c2c9bd',lineHeight:1.7}}>Logowanie działa bez konfiguracji zmiennych środowiskowych. Hasło tymczasowe ustawione w kodzie to <strong>admin</strong>.</p><p style={{color:'#ffcf8b',fontSize:13,lineHeight:1.7}}>To uproszczone logowanie testowe. Nie używaj go do ochrony poufnych danych na publicznej stronie.</p></section></div></main>;
+  const [password, setPassword] = useState('');
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [error, setError] = useState('');
+
+  function handleLogin(event) {
+    event.preventDefault();
+    if (password !== OWNER_PANEL_PASSWORD) {
+      setError('Nieprawidłowe hasło. Spróbuj ponownie.');
+      return;
+    }
+    setError('');
+    setIsLoggedIn(true);
+  }
+
+  function handleLogout() {
+    setPassword('');
+    setIsLoggedIn(false);
+    setError('');
+  }
+
+  const pageStyle = {
+    minHeight: '100vh',
+    boxSizing: 'border-box',
+    padding: 24,
+    display: 'grid',
+    placeItems: 'center',
+    background: '#10150f',
+    color: '#f5f3eb',
+    fontFamily: 'Manrope, sans-serif'
+  };
+  const cardStyle = {
+    width: '100%',
+    maxWidth: 440,
+    boxSizing: 'border-box',
+    padding: 32,
+    border: '1px solid #344034',
+    borderRadius: 16,
+    background: '#192019'
+  };
+  const inputStyle = {
+    width: '100%',
+    boxSizing: 'border-box',
+    padding: 14,
+    margin: '8px 0 16px',
+    border: '1px solid #56634f',
+    borderRadius: 8,
+    background: '#10150f',
+    color: '#fff',
+    fontSize: 16
+  };
+  const buttonStyle = {
+    padding: '13px 16px',
+    border: 0,
+    borderRadius: 8,
+    background: '#a7bd8d',
+    color: '#10150f',
+    fontWeight: 700,
+    cursor: 'pointer'
+  };
+
+  if (!isLoggedIn) {
+    return (
+      <main style={pageStyle}>
+        <form onSubmit={handleLogin} style={cardStyle}>
+          <p style={{color:'#a7bd8d',fontSize:12,letterSpacing:3}}>ZIELEŃ SERWIS</p>
+          <h1 style={{fontSize:30,margin:'12px 0'}}>Panel właściciela</h1>
+          <p style={{color:'#b7beb2',lineHeight:1.6}}>Zaloguj się, aby otworzyć panel demonstracyjny.</p>
+          <label htmlFor="owner-panel-password" style={{display:'block',fontSize:14}}>Hasło</label>
+          <input
+            id="owner-panel-password"
+            type="password"
+            autoComplete="current-password"
+            value={password}
+            onChange={event => setPassword(event.target.value)}
+            required
+            style={inputStyle}
+          />
+          <button type="submit" style={{...buttonStyle,width:'100%'}}>Wejdź do panelu</button>
+          {error && <p role="alert" style={{color:'#ffb4a9',fontSize:14}}>{error}</p>}
+          <a href="/" style={{display:'inline-block',marginTop:22,color:'#c9d7bb',fontSize:13}}>← Wróć na stronę główną</a>
+        </form>
+      </main>
+    );
+  }
+
+  return (
+    <main style={{...pageStyle,display:'block'}}>
+      <div style={{maxWidth:900,margin:'0 auto'}}>
+        <header style={{display:'flex',justifyContent:'space-between',alignItems:'center',gap:16,flexWrap:'wrap'}}>
+          <div>
+            <p style={{color:'#a7bd8d',fontSize:12,letterSpacing:3}}>ZIELEŃ SERWIS</p>
+            <h1 style={{fontSize:34,margin:'8px 0'}}>Panel właściciela</h1>
+          </div>
+          <button onClick={handleLogout} style={buttonStyle}>Wyloguj</button>
+        </header>
+        <section style={{marginTop:28,padding:24,border:'1px solid #344034',borderRadius:12,background:'#192019'}}>
+          <h2 style={{marginTop:0}}>Witaj w panelu</h2>
+          <p style={{color:'#c2c9bd',lineHeight:1.7,marginBottom:0}}>
+            Panel został uruchomiony. Możemy teraz dodawać do niego konkretne funkcje, których potrzebujesz.
+          </p>
+        </section>
+        <a href="/" style={{display:'inline-block',marginTop:24,color:'#c9d7bb',fontSize:13}}>← Wróć na stronę główną</a>
+      </div>
+    </main>
+  );
 }
-const isOwnerRoute=window.location.pathname.replace(/\/+$/,'')==='/admin';
-createRoot(document.getElementById('root')).render(isOwnerRoute?<OwnerPanel/>:<App/>);
+
+const isOwnerRoute = window.location.pathname.replace(/\\/+$/, '') === '/admin';
+createRoot(document.getElementById('root')).render(isOwnerRoute ? <OwnerPanel /> : <App />);
