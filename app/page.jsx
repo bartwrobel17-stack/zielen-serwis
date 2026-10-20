@@ -57,6 +57,7 @@ function App(){
  else if(/projekt|zakład|założ|ogr[oó]d|nasadzen|roślin/.test(q))answer='Pomagamy od projektu i przygotowania terenu po nasadzenia, trawnik i pielęgnację. Możesz zamówić kompleksową realizację lub pojedynczą usługę.';
  else if(/bruk|ścież|taras|pergol|nawierzch|miniładow|ziemne|niwel/.test(q))answer='Wykonujemy nawierzchnie i elementy małej architektury oraz prace ziemne, niwelację i prace z wykorzystaniem miniładowarek.';
  else if(/gdzie|adres|dojazd|lokal|bydgoszcz|łochow/.test(q))answer='Siedziba: Szosa Bydgoska 22, 86-065 Łochowo. Obsługujemy Łochowo, Bydgoszcz i okolice. Dalszy dojazd najlepiej potwierdzić telefonicznie.';
+ else if(/usług|ofert|co robicie|czym się zajmujecie/.test(q))answer='Oferujemy projektowanie i zakładanie ogrodów, trawniki i nasadzenia, pielęgnację zieleni, systemy nawadniania, oczka wodne, nawierzchnie i małą architekturę oraz prace ziemne z miniładowarkami.';
  else if(/kontakt|telefon|zadzwoń|numer|sms/.test(q))answer='Zadzwoń pod 795 548 125. Możesz też użyć formularza na stronie — przygotuje SMS do samodzielnego wysłania.';
  else if(/godzin|kiedy|termin|wolny/.test(q))answer='Nie mam dostępu do aktualnego kalendarza terminów. Zadzwoń pod 795 548 125, żeby ustalić dostępność.';
  setChatMessages(m=>[...m,{from:'user',text:question},{from:'bot',text:answer}]);setChatInput('');};
