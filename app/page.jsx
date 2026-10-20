@@ -84,3 +84,5 @@ function App(){
   {activePhoto!==null&&<div className="lightbox" role="dialog" aria-modal="true" aria-label="Podgląd zdjęcia" onClick={()=>setActivePhoto(null)}><button className="lightbox-close" onClick={()=>setActivePhoto(null)} aria-label="Zamknij"><X/></button><button className="lightbox-prev" onClick={e=>{e.stopPropagation();setActivePhoto(i=>(i-1+gallery.length)%gallery.length)}} aria-label="Poprzednie zdjęcie"><ChevronLeft/></button><img src={gallery[activePhoto].src} alt={gallery[activePhoto].label} onClick={e=>e.stopPropagation()}/><button className="lightbox-next" onClick={e=>{e.stopPropagation();setActivePhoto(i=>(i+1)%gallery.length)}} aria-label="Następne zdjęcie"><ChevronRight/></button><p>{gallery[activePhoto].label} <span>{activePhoto+1} / {gallery.length}</span></p></div>}
  </div>
 }
+
+export default App;
