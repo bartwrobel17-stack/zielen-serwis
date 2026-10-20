@@ -195,5 +195,5 @@ function OwnerPanel(){
   );
 }
 
-const isOwnerRoute = window.location.pathname.replace(/\\/+$/, '') === '/admin';
+const isOwnerRoute = window.location.pathname.replace(/\/+$/, '') === '/admin';
 createRoot(document.getElementById('root')).render(isOwnerRoute ? <OwnerPanel /> : <App />);
