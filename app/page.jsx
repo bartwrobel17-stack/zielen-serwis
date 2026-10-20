@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import { ArrowDown, ArrowRight, ArrowUpRight, Check, ChevronDown, ChevronLeft, ChevronRight, Droplets, Flower2, Leaf, Menu, Phone, Trees, X, Sprout, Shovel, Waves, Fence, Scissors, MapPin, Clock3, Send, Star } from "lucide-react";
 
-import { ArrowDown, ArrowRight, ArrowUpRight, Check, ChevronDown, ChevronLeft, ChevronRight, Droplets, Flower2, Leaf, Menu, Phone, Trees, X, Sprout, Shovel, Waves, Fence, Scissors, MapPin, Clock3, Send, Star } from 'lucide-react';
 
 const phone = '795 548 125';
 const tel = '+48795548125';
